@@ -139,16 +139,31 @@ class Claim:
                 temp_info = []
                 for item, num in np.array(array_parts):
                     if sum(temp_part == item) != 1:
-                        temp_info.append(f'{item}({num})')
+                        temp_info.append([item, num])
                     else:
                         if sum(temp_nums == num) != 1:
-                            temp_info.append(f'{item}({num})')
+                            temp_info.append([item, num])
                         pass
                 # for item, num in np.array(array_parts):
                 #     if sum(temp_nums == num) != 1:
                 #         temp_info.append(f'{item}({num})')
                 if temp_info:
-                    LOGGER.info(f'权利要求{idx + 1}可能出了问题, {temp_info}可能存在标号冲突,或错别字')
+                    # 把部件和部件数字组合起来
+                    temp_res = []
+                    temp_info = np.array(temp_info)
+                    key = np.unique(temp_info[:, 0])
+                    for temp in key:
+                        info = temp_info[np.where(temp_info[:, 0] == temp)]
+                        if len(info) > 1:
+                            temp_res.append(info)
+                            temp_info = temp_info[np.where(temp_info[:, 0] != temp)]
+                    value = np.unique(temp_info[:, 1])
+                    for temp in value:
+                        info = temp_info[np.where(temp_info[:, 1] == temp)]
+                        if len(info) > 1:
+                            temp_res.append(info)
+                            temp_info = temp_info[np.where(temp_info[:, 1] != temp)]
+                    LOGGER.info(f'权利要求{idx + 1}可能出了问题, {temp_res}可能存在标号冲突,或错别字')
             # 非权利要求1 and 权利要求存在部件时进入
             if list(array_parts) and list(all_parts):
                 # print(idx+1)
