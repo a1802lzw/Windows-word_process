@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>形式检测</title>
+    {% from "_macros.html" import import_js, import_css, Navigation_Bar with context%}
+    {{ import_css() }}
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="row tm-brand-row">
+        {{ Navigation_Bar(selected='work') }}
+      </div>
+        <div>
+            {% if txt_info %}
+              <p class="tm-section-2-text">
+              {% for item in txt_info %}
+                   {{ item }}<br/>
+              {% endfor %}
+              </p>
+            {% endif %}
+        </div>
+      <!-- 表单提交 -->
+      <section class="row" id="tmCallToAction">
+        <div class="col-12 tm-page-cols-container tm-call-to-action-col">
+                 <div class="tm-page-col-left tm-welcome-box tm-bg-gradient">
+            <p class="tm-welcome-text">
+              <em
+                >"初版，测试中"<br></em
+              >
+                <em
+                >"问题反馈微信:13467536665"</em
+              >
+            </p>
+          </div>
+          <div class="tm-page-col-right">
+            <div class="tm-call-to-action-box">
+              <i class="fas fa-3x fa-rss-square tm-call-to-action-icon"></i>
+              <div class="tm-call-to-action-text">
+                <h3 class="tm-call-to-action-title">
+                  这里上传文件
+                </h3>
+                <div class="tm-call-to-action-description tm-welcome-box "
+                     style="width: 500px; height: 150px;background: #999a9b;color: #abdde5;
+                     border: 5px;
+                     border-color: #c82333" id="Upload">
+                  文件拖拽至这里!
+                </div>
+                <div id="Uploaded">
+
+                </div>
+                <form action="{{ url_for("main.get_data") }}" method="POST" class="tm-call-to-action-form" enctype="multipart/form-data">
+                  <input
+                    type="file"
+                    id="up_file"
+                    name="up_file"
+                    required
+                  />
+                  <button type="submit" class="btn btn-primary">
+                      开始检测
+                  </button>
+
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- 拖拽上传 -->
+
+      <!-- Page footer -->
+{#      <footer class="row tm-page-footer">#}
+{#          {% if txt_info %}#}
+{#              <p class="tm-section-2-text">#}
+{#              {% for item in txt_info %}#}
+{#                   {{ item }}<br/>#}
+{#              {% endfor %}#}
+{#              </p>#}
+{#          {% endif %}#}
+{#      </footer>#}
+    </div>
+    {{ import_js() }}
+  <!-- js 函数部分 -->
+  <script type="text/javascript">
+          var target = document.getElementById('Upload')
+          target.ondragenter = function(){
+                console.log('进入目标元素')
+            }
+            target.ondragover = function(event){
+                var event = event || window.event;
+                console.log('在目标元素中拖拽');
+                this.style.background = '#218838';
+                event.preventDefault()
+            }
+            target.ondragleave = function(){
+                console.log('拖放离开目标元素')
+                this.style.background = '#999a9b';
+
+            }
+            target.ondrop = function(event) {
+                console.log('拖放');
+                var e = event || window.event;
+                // 阻止浏览器打开文件
+                e.preventDefault()
+                this.style.background = '#999a9b';
+                // 获得文件
+                var files = e.dataTransfer.files;
+                //获取文件大小
+                var file = files[0]
+                var filename = file.name
+                var uploaded = document.getElementById('Uploaded')
+                uploaded.textContent = filename
+                var formData = new FormData();
+                formData.append('file', file)
+                uploadFile(formData)
+                window.location.href= "{{ url_for("main.temp_data") }}"
+                // 上传文件暂时有点困难
+            }
+            function uploadFile(formData) {
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', '{{ url_for("main.get_data") }}', true);
+                xhr.send(formData);
+            }
+            // 设置点击事件
+          {#$('#up_file').click(function () {#}
+          {#    if ($(this).val() === ''){#}
+          {#        return true#}
+          {#    }#}
+          {#    else{#}
+          {#        return false#}
+          {#    }#}
+          {# }) #}
+  </script>
+  </body>
+</html>

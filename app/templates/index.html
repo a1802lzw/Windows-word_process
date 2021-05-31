@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>形式检测</title>
+    {% from "_macros.html" import import_css, import_js, Navigation_Bar  with context %}
+    {{ import_css() }}
+  </head>
+  <body>
+    <div class="container-fluid">
+
+      <div class="row tm-brand-row">
+        {{ Navigation_Bar() }}
+      </div>
+
+      <div class="row tm-welcome-row">
+        <div class="col-12 tm-page-cols-container">
+          <div class="tm-page-col-left tm-welcome-box tm-bg-primary">
+            <p class="tm-welcome-text">
+              <em>“这是一个找出文档错误,间接提高工作效率的
+                工具人系统“</em>
+            </p>
+          </div>
+          <div class="tm-page-col-right">
+            <div
+              class="tm-welcome-parallax"
+              data-parallax="scroll"
+              data-image-src="{{url_for('static', filename='img/blue-contem-girl.jpg')}}"
+            ></div>
+          </div>
+        </div>
+      </div>
+
+      <section class="row tm-pt-4 tm-pb-6">
+        <div class="col-12 tm-page-cols-container">
+          <div class="tm-page-col-right">
+            <h2 class="tm-text-secondary tm-mb-5">
+              1.0版本
+            </h2>
+            <p class="tm-mb-6">
+              1、对重要部分做了 <strong>错误检查</strong>
+            </p>
+            <p class="tm-mb-6">
+              2、对于 <strong>禁用词汇</strong> 可能无意之间会出现，所以对禁用词汇进行了错误检查
+            </p>
+            <p class="tm-mb-6">
+              3、对书写权利要求书的 <strong>细节</strong> 进行了检查，检查那些肉眼不易发现的错误
+            </p>
+            <p class="tm-mb-6">
+              4、对于<strong>权利引用错误</strong>做了检查，目前能查出单引错误
+            </p>
+            <p class="mb-0">
+           	  ......
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <div class="tm-page-col-right">
+        <div class="row tm-pt-7 tm-pb-6">
+          <div class="col-md-6 tm-home-section-2-left">
+            <div
+              class="img-fluid tm-mb-4 tm-welcome-parallax"
+              data-parallax="scroll"
+              data-image-src="{{url_for('static', filename='img/'+beautiful[weekday])}}"></div>
+            <div>
+              <h3 class="tm-text-secondary tm-mb-4">
+                后续更新内容
+              </h3>
+              <ul class="tm-list-plus">
+                <li>......</li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-md-6 tm-home-section-2-right">
+            <div>
+              <h3 class="tm-text-secondary tm-mb-4">
+                休闲区
+              </h3>
+                {% for item in poems[weekday] %}
+                  <p class="tm-section-2-text">
+                      {{ item }}
+                  </p>
+                {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Page footer -->
+{#      <footer class="row tm-page-footer">#}
+{#        <p class="col-12 tm-copyright-text mb-0">#}
+{#          html and flask opening on#}
+{#          <a href="#" rel="nofollow" class="tm-copyright-link">here</a>#}
+{#        </p>#}
+{#      </footer>#}
+    </div>
+
+    {{ import_js() }}
+  </body>
+</html>
