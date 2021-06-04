@@ -115,6 +115,7 @@ class Claim:
                 idx_weight = part_array.index('权利要求') + 1
                 # 获得权力要求引用对应权利要求
                 idx_weight = int(part_array[idx_weight])
+                assert idx_weight != idx + 1, f'权利要求{idx + 1}出了问题，不能引用自身'
                 idx_weight_lis.append(idx_weight - 1)
                 # 获得权力要求对应词句
                 part_array = self.word_lis[idx_weight - 1]

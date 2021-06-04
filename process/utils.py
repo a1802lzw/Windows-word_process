@@ -19,7 +19,9 @@ def error_decorator(LOGGER):
                 # # 错误函数所在行号
                 # fun_line_on = func.__code__.co_firstlineno
                 # print(error_info)
-                # LOGGER().info('以下为程序错误记录')
+                if isinstance(e, AssertionError):
+                    # 写入断言错误提示
+                    LOGGER().info(e.args[0])
                 LOGGER().error(error_info)
         return wap
     return wap_error_check
