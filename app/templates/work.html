@@ -5,10 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>形式检测</title>
-    {% from "_macros.html" import import_js, import_css, Navigation_Bar with context%}
+    {% from "_macros.html" import import_js, import_css, Navigation_Bar, footer, header with context%}
     {{ import_css() }}
   </head>
   <body>
+    {{ header() }}
     <div class="container-fluid">
       <div class="row tm-brand-row">
         {{ Navigation_Bar(selected='work') }}
@@ -71,15 +72,7 @@
       <!-- 拖拽上传 -->
 
       <!-- Page footer -->
-{#      <footer class="row tm-page-footer">#}
-{#          {% if txt_info %}#}
-{#              <p class="tm-section-2-text">#}
-{#              {% for item in txt_info %}#}
-{#                   {{ item }}<br/>#}
-{#              {% endfor %}#}
-{#              </p>#}
-{#          {% endif %}#}
-{#      </footer>#}
+    {{ footer() }}
     </div>
     {{ import_js() }}
   <!-- js 函数部分 -->

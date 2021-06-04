@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>形式检测</title>
-    {% from "_macros.html" import import_css, import_js, Navigation_Bar  with context %}
+    {% from "_macros.html" import import_css, import_js, Navigation_Bar, footer, header  with context %}
     {{ import_css() }}
   </head>
   <body>
+    {{ header() }}
     <div class="container-fluid">
-
       <div class="row tm-brand-row">
         {{ Navigation_Bar() }}
       </div>
@@ -89,12 +89,7 @@
         </div>
       </div>
       <!-- Page footer -->
-{#      <footer class="row tm-page-footer">#}
-{#        <p class="col-12 tm-copyright-text mb-0">#}
-{#          html and flask opening on#}
-{#          <a href="#" rel="nofollow" class="tm-copyright-link">here</a>#}
-{#        </p>#}
-{#      </footer>#}
+        {{ footer() }}
     </div>
 
     {{ import_js() }}

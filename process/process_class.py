@@ -155,13 +155,13 @@ class Claim:
                     for temp in key:
                         info = temp_info[np.where(temp_info[:, 0] == temp)]
                         if len(info) > 1:
-                            temp_res.append(info)
+                            temp_res.append(info.tolist())
                             temp_info = temp_info[np.where(temp_info[:, 0] != temp)]
                     value = np.unique(temp_info[:, 1])
                     for temp in value:
                         info = temp_info[np.where(temp_info[:, 1] == temp)]
                         if len(info) > 1:
-                            temp_res.append(info)
+                            temp_res.append(info.tolist())
                             temp_info = temp_info[np.where(temp_info[:, 1] != temp)]
                     LOGGER.info(f'权利要求{idx + 1}可能出了问题, {temp_res}可能存在标号冲突,或错别字')
             # 非权利要求1 and 权利要求存在部件时进入
@@ -243,6 +243,9 @@ class Manual:
             index = -1
             for value in values:
                 index = self.string.find(value + '\n')
+                # 可能在最后一行
+                if index == -1:
+                    index = self.string.find('\n' + value)
                 if index != -1:
                     break
             idx.append(index)
@@ -394,9 +397,13 @@ class Rule:
         # 非规则表上的规则
         # 非空判断
         # if self.part['说明书'].string:
-        if self.part['说明书'].string and self.part['图'].string:
-            if not self.part['说明书'].manual_map_len == self.part['图'].map_len:
-                LOGGER.info(f'说明书附图与附图不相同')
+        s1 = self.part['说明书'].string
+        s2 = self.part['图'].string
+        if s1 and s2:
+            说明书的附图说明小节用文字表述的图的数量= self.part['说明书'].manual_map_len
+            说明书附图中图片的张数 = self.part['图'].map_len
+            if not 说明书附图中图片的张数 == 说明书的附图说明小节用文字表述的图的数量:
+                LOGGER.info(f'说明书附图中图片的张数为（{说明书附图中图片的张数}） 、说明书的附图说明小节用文字表述的图的数量为（{说明书的附图说明小节用文字表述的图的数量}），二者不相符')
         self.part['权利要求书'].check()
 
     @staticmethod  # 必有 其中之一 简化函数用法，使其变得更通用
