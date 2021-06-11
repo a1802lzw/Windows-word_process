@@ -162,9 +162,23 @@ class Claim:
                     for temp in value:
                         info = temp_info[np.where(temp_info[:, 1] == temp)]
                         if len(info) > 1:
-                            temp_res.append(info.tolist())
+                            # 获得最短的词 并以此为基准
+                            min_word = info.tolist()[np.apply_along_axis(lambda x: len(x[0]),
+                                                                         axis=0, arr=info[:, 0].reshape(1, -1))]
+                            info_lis = []
+                            for item in info.tolist():
+                                if min_word[0] not in item[0] and min_word[0] != item[0]:
+                                    info_lis.append(item)
+                            if info_lis:
+                                info_lis.append(min_word)
+
+                            temp_res.append(info_lis)
                             temp_info = temp_info[np.where(temp_info[:, 1] != temp)]
-                    LOGGER.info(f'权利要求{idx + 1}可能出了问题, {temp_res}可能存在标号冲突,或错别字')
+                    if temp_res:
+                        LOGGER.info(f'权利要求{idx + 1}可能出了问题')
+                        for item in temp_res:
+                            LOGGER.info(f'{item}')
+                        LOGGER.info(f'以上可能出现部件名称或标号错误')
             # 非权利要求1 and 权利要求存在部件时进入
             if list(array_parts) and list(all_parts):
                 # print(idx+1)
@@ -523,7 +537,7 @@ def split_str(string):
 # 分词函数
 @utils.error_decorator(get_logger)
 def get_words(string):
-    return list(jieba.cut(string, use_paddle=False))
+    return list(jieba.cut(string))
 
 
 # get text result
