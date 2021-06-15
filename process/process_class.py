@@ -163,16 +163,16 @@ class Claim:
                         info = temp_info[np.where(temp_info[:, 1] == temp)]
                         if len(info) > 1:
                             # 获得最短的词 并以此为基准
-                            min_word = info.tolist()[np.apply_along_axis(lambda x: len(x[0]),
-                                                                         axis=0, arr=info[:, 0].reshape(1, -1))]
+                            min_word_idx = np.argmin(np.apply_along_axis(lambda x: len(x[0]),
+                                                                         axis=0, arr=info[:, 0].reshape(1, -1)))
+                            min_word = info.tolist()[min_word_idx]
                             info_lis = []
                             for item in info.tolist():
                                 if min_word[0] not in item[0] and min_word[0] != item[0]:
                                     info_lis.append(item)
                             if info_lis:
                                 info_lis.append(min_word)
-
-                            temp_res.append(info_lis)
+                                temp_res.append(info_lis)
                             temp_info = temp_info[np.where(temp_info[:, 1] != temp)]
                     if temp_res:
                         LOGGER.info(f'权利要求{idx + 1}可能出了问题')
