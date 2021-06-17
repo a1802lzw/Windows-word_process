@@ -14,4 +14,6 @@ app = Flask(__name__)
 app.debug = True
 
 from .main import main as main_blueprint
+from .author import author as author_blueprint
 app.register_blueprint(main_blueprint, static_fold='static')
+app.register_blueprint(author_blueprint, static_fold='static')
