@@ -74,8 +74,8 @@ class Claim:
     权利要求书
     """
     def __init__(self, string):
-        self.string = re.sub(re.compile(r'\s+'), '', string)
-        # self.string = string
+        # self.string = re.sub(re.compile(r'\s+'), '', string)
+        self.string = string
         # 权利要求 字符串
         if self.string:
             self.string_lis = split_str(self.string)
@@ -508,29 +508,26 @@ def get_part(word):
 # 分割权利要求的函数，有待提高
 @utils.error_decorator(get_logger)
 def split_str(string):
-    str_lis = string.split('。')
-    # print(str_lis)
-    if str_lis[-1].strip():
-        LOGGER.info('最后一项权利要求没有以句号结尾')
-    for idx, s in enumerate(str_lis):
-        # 不能为空
-        if not str_lis[idx].strip():
-            str_lis.pop(idx)
-            continue
-        if not s.strip()[0].isdigit():
-            LOGGER.info(f'权利要求{idx}出了问题， 可能是存在多个句号, 在"{str_lis[idx - 1][-5:]}"后面')
-            err = str_lis.pop(idx)
-            str_lis[idx - 1] += err
-        if f"{idx + 2}．" in str_lis[idx] or f"{idx + 2}." in str_lis[idx]:
-            try:
-                err_idx = str_lis[idx].index(f"{idx + 2}．")
-            except ValueError:
-                err_idx = str_lis[idx].index(f"{idx + 2}.")
-            LOGGER.info(f'权利要求{idx+1}出了问题， 可能没有以句号结尾, 在"{str_lis[idx][err_idx - 6:err_idx - 1]}"后面')
-            err = str_lis.pop(idx)
-            str1, str2 = err[:err_idx], err[err_idx:]
-            str_lis.insert(idx, str1)
-            str_lis.insert(idx + 1, str2)
+    # print(string)
+    str_lis = []
+    for cla in string.split('\n'):
+        cla = re.sub(re.compile(r'\s+'), '', cla)
+        if cla:
+            if cla[0].isdigit() or '权利要求' in cla or not str_lis:
+                if str_lis:
+                    # 获得长度就能知道是权利要求几了
+                    error_info = ''
+                    if str_lis[-1].count('。') > 1:
+                        error_info = f'权利要求{len(str_lis)}可能出了问题, 可能存在多个句号'
+                    elif str_lis[-1].count('。') == 1 and str_lis[-1][-1] != '。':
+                        error_info = f'权利要求{len(str_lis)}可能出了问题, 句号可能写错地方'
+                    elif str_lis[-1].count('。') == 0:
+                        error_info = f'权利要求{len(str_lis)}可能出了问题, 没有以句号结尾'
+                    if error_info:
+                        LOGGER.info(error_info)
+                str_lis.append(cla)
+            else:
+                str_lis[-1] += cla
     return str_lis
 
 
